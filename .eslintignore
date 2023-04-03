@@ -1,0 +1,31 @@
+# Ignore artifacts:
+build
+coverage
+dist
+node_modules
+reports
+
+# Ignore version control files.
+.gitignore
+.editorconfig
+
+# Ignore configuration files
+.eslintrc
+.prettierignore
+.prettierrc
+tsconfig.json
+
+# Ignore files not written in JavaScript
+*.md
+*.lock
+*.log
+*.txt
+*.yml
+*.yaml
+*.json
+*.scss
+*.css
+*.html
+*.xml
+*.svg
+*.less
