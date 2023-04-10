@@ -1,5 +1,5 @@
 import cls from 'classnames';
-import { FunctionComponent, useCallback, useEffect, useMemo, useRef } from 'react';
+import { FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useImageProgress } from '../effects/useImageDownload';
 import { cssPropertiesToString } from '../utils';
 import { AnimationSelector } from './animation-selector';
@@ -15,8 +15,9 @@ const LightBox: FunctionComponent<LightBoxModel> = ({
   showSpinner = true,
   loadingAnimationType = 'spinner',
 }) => {
-  const { init, loadingImage, progress } = useImageProgress(src, fallbackURL);
+  const { init, imageLoading, imageLoaded, progress } = useImageProgress(src, fallbackURL);
   const nodeRef = useRef<HTMLDivElement | null>(null);
+  const [canInit, setCanInit] = useState(false);
 
   const wrapperStyle = useMemo(() => {
     return {
@@ -28,29 +29,30 @@ const LightBox: FunctionComponent<LightBoxModel> = ({
   const onRef = useCallback((node: HTMLDivElement) => {
     if (node !== null) {
       nodeRef.current = node;
+      setCanInit(true);
     }
   }, []);
 
   useEffect(() => {
-    const node = nodeRef.current as HTMLDivElement;
+    const node = nodeRef.current;
 
     const exec = async (node: HTMLDivElement) => {
       await init(node);
     };
 
-    if (node) {
+    if (node && canInit) {
       exec(node)
         .then(() => {
-          console.log('image loaded');
+          // console.log('image loaded');
         })
-        .catch((err) => {
-          console.log('image load error', err);
+        .catch(() => {
+          // console.log('image load error', err);
         });
     }
-  }, [nodeRef.current]);
+  }, [canInit]);
 
   useEffect(() => {
-    const node = nodeRef.current as HTMLDivElement;
+    const node = nodeRef.current;
     const firstChild = node.firstChild as HTMLImageElement;
 
     if (firstChild) {
@@ -59,27 +61,39 @@ const LightBox: FunctionComponent<LightBoxModel> = ({
   }, [style]);
 
   const canShowSpinner = useMemo(() => {
-    return showSpinner && loadingImage;
-  }, [showSpinner, loadingImage]);
+    return showSpinner && imageLoading;
+  }, [showSpinner, imageLoading]);
 
   const lightBoxClass = useMemo(() => {
-    return loadingImage ? cls(styles.wrapper, styles.loading) : cls(styles.wrapper, styles.loaded);
-  }, [loadingImage]);
+    return imageLoading ? cls(styles.wrapper, styles.loading) : cls(styles.wrapper, styles.loaded);
+  }, [imageLoading]);
 
   const spinWrapperClass = useMemo(() => {
     return cls({
       [styles.spin_wrapper]: true,
       [styles.show]: canShowSpinner,
-      [styles.hide]: !loadingImage,
+      [styles.hide]: !imageLoading,
     });
-  }, [loadingImage]);
+  }, [imageLoading]);
 
   const imageContainerClass = useMemo(() => {
     return cls({
       [styles.image_container]: true,
-      [styles.loading]: loadingImage,
+      [styles.loading]: imageLoading,
     });
-  }, [loadingImage]);
+  }, [imageLoading]);
+
+  useEffect(() => {
+    if (imageLoaded) {
+      const node = nodeRef.current;
+      const fallbackImage: HTMLImageElement = node.querySelector('img[data-fallback=true]');
+
+      if (fallbackImage) {
+        fallbackImage.style.height = '0px';
+        // fallbackImage.classList.add(styles.reveal_image_left);
+      }
+    }
+  }, [imageLoaded]);
 
   return (
     <div className={lightBoxClass} style={wrapperStyle}>

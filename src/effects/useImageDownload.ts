@@ -4,9 +4,9 @@ import { useFileDownloader } from './useFileDownloader';
 
 // generate type definition for the hook
 const useImageProgress = (src: string, fallback?: string) => {
-  const [loaded, setLoaded] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [error, setError] = useState(false);
-  const [loadingImage, setLoadingImage] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
   const { downloadFile, blob, progress } = useFileDownloader(src);
 
   const nodeRef = useRef<HTMLElement | null>(null);
@@ -19,42 +19,44 @@ const useImageProgress = (src: string, fallback?: string) => {
       if (fallback) {
         const image = new Image();
         image.src = fallback;
+        image.setAttribute('data-fallback', 'true');
+        node.style.cssText =
+          'position: absolute; top: 0; left: 0; width: 100%; height: 100%;z-index: 2;';
         fallbackRef.current = node.appendChild(image);
       }
-      setLoadingImage(true);
+      setImageLoading(true);
       await downloadFile();
     },
     [fallback]
   );
 
   useEffect(() => {
-    if (blob && nodeRef.current && !loaded) {
+    if (blob && nodeRef.current && !imageLoaded) {
       const image = new Image();
-      const node = nodeRef.current;
+      image.style.cssText =
+        'position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;';
 
       image.onload = () => {
-        setLoaded(true);
+        const node = nodeRef.current;
+        node?.appendChild(image);
+
+        setTimeout(() => {
+          setImageLoaded(true);
+          setImageLoading(false);
+        }, 200);
       };
 
       image.onerror = () => {
-        setLoaded(false);
+        setImageLoaded(false);
         setError(true);
-        setLoadingImage(false);
+        setImageLoading(false);
       };
 
       imageURl.current = URL.createObjectURL(blob);
 
       image.src = imageURl.current;
-
-      setTimeout(() => {
-        if (fallbackRef.current) {
-          node.removeChild(fallbackRef.current);
-        }
-        setLoadingImage(false);
-        node.appendChild(image);
-      }, 200);
     }
-  }, [blob, loaded]);
+  }, [blob, imageLoaded]);
 
   //write the cleanup
   useEffect(() => {
@@ -65,7 +67,7 @@ const useImageProgress = (src: string, fallback?: string) => {
     };
   }, []);
 
-  return { progress, init, loaded, error, loadingImage };
+  return { progress, init, imageLoaded, error, imageLoading };
 };
 
 export { useImageProgress };

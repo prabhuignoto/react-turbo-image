@@ -26,7 +26,7 @@ const useFileDownloader = (url: string) => {
         if (done) {
           const blob = new Blob(chunks, { type: 'image/jpeg' });
           setBlob(blob);
-          return;
+          return true;
         }
 
         // Update the loaded size and calculate the progress percentage
@@ -44,7 +44,7 @@ const useFileDownloader = (url: string) => {
       await read();
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.warn('Error downloading file:', error);
+      return Promise.reject(error);
     }
   };
 

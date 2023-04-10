@@ -16,8 +16,8 @@ function App() {
   return (
     <div className="App">
       <LightBox
-        width={600}
-        height={500}
+        width={800}
+        height={700}
         style={{ borderRadius: '10px' }}
         src={
           'https://images.unsplash.com/photo-1680675313845-13d3f5f17080?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format'
@@ -25,8 +25,8 @@ function App() {
         fallbackURL="https://images.unsplash.com/photo-1680675313845-13d3f5f17080?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&w=50"
       />
       <LightBox
-        width={600}
-        height={500}
+        width={800}
+        height={700}
         style={{ borderRadius: '10px' }}
         loadingAnimationType="circular_progress"
         src={
@@ -35,8 +35,8 @@ function App() {
         fallbackURL="https://images.unsplash.com/photo-1680675805063-3aa8b3607b0a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&w=50&h=50"
       />
       <LightBox
-        width={600}
-        height={500}
+        width={800}
+        height={700}
         style={{ borderRadius: '10px' }}
         loadingAnimationType="progress_bar"
         src={
