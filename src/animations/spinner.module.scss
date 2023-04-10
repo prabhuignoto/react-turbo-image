@@ -1,0 +1,46 @@
+$spinner-size: 40px;
+$spinner-color: #ffffff;
+$spinner-arms: 8;
+
+.spinnerArms {
+  position: relative;
+  width: $spinner-size;
+  height: $spinner-size;
+}
+
+// @for $i from 1 through $spinner-arms {
+//   .spinnerArm#{$i} {
+//     transform: rotate($i * 45deg);
+//   }
+// }
+
+.spinnerArm {
+  @extend .spinnerArms;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top-color: $spinner-color;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}

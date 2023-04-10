@@ -1,0 +1,46 @@
+.wrapper {
+  display: flex;
+  overflow: hidden;
+  border-radius: 4px;
+  position: relative;
+  
+}
+
+.image_container {
+  img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+  
+  transition: filter 0.1s ease-in;
+  
+  &.loading {
+    filter: blur(10px);
+  }
+}
+
+.spin_wrapper {
+  align-items: center;
+  // background-color: rgba(0, 0, 0, 0.1);
+  display: flex;
+  filter: blur(0px);
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
+  width: 100%;
+  z-index: 1;
+
+  &.show {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &.hide {
+    visibility: hidden;
+    opacity: 0;
+  }
+}

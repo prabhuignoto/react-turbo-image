@@ -21,7 +21,21 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src/",
+    "eslintrc.cjs",
+    "prettierrc.cjs",
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "coverage",
+    "public",
+    "scripts",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.test.js",
+    "src/**/*.test.jsx",
   ],
   "references": [
     {
